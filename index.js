@@ -26,7 +26,7 @@ app.post("/upload", function (req, res) {
 
     // Upload path
     const uploadPath = __dirname
-        + "/uploads/" + uploadedFile.name;
+        + "/public/uploads/" + uploadedFile.name;
         async function run() {
           try {
             await client.connect();
