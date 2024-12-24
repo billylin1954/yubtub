@@ -4,6 +4,7 @@ const client = new  MongoClient(uri);
 const express = require("express");
 const app = express();
 const cors = require('cors');
+app.use(express.static('public'))
 app.use(cors())
 const PORT = process.env.PORT || 3001;
 app.use(express.json());
@@ -26,18 +27,20 @@ app.post("/upload", function (req, res) {
 
     // Upload path
     const uploadPath = __dirname
-        + "/public/uploads/" + uploadedFile.name;
+        +  "/frontend/public/uploads/" + uploadedFile.name;
         async function run() {
+          const uploadPath = __dirname
+        + "/frontend/public/uploads/" + uploadedFile.name;
           try {
             await client.connect();
             console.log("Connected successfully to MongoDB");
          
             const database = client.db('videos');
             const collection = database.collection('videos');
-            const link = uploadPath
+           const link = uploadPath
             const type="customer";
             // Insert the document into MongoDb
-            await collection.insertOne({ uploadPath, type});
+            await collection.insertOne({ type,link});
          
           } catch (error) {
             console.error("Error:", error);
@@ -47,7 +50,6 @@ app.post("/upload", function (req, res) {
           }
          }
          const receivedData = req.body;
-         console.log('Data received from frontend:', receivedData);
        
          
          
@@ -77,7 +79,7 @@ app.get("/download", function (req, res) {
 app.get("/", function (req, res) {
 
   // Sending index.html file as response to the client
-  res.sendFile(__dirname + "/index.html");
+  res.sendFile(__dirname + "/upload.html");
 });
 
   async function run() {
