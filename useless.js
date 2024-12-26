@@ -1,47 +1,72 @@
-import express,{json} from 'express';
-import  {MongoClient}  from 'mongodb';
-const uri = "mongodb+srv://billylin1954:Cracknut4@cluster0.rrsqc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-const client = new MongoClient(uri);
-const app = express();
-//const { readFile } = promises;
+why is vids not changed:  import './App.css';
+  let test=["./uploads/0001-0030.mp4","./uploads/0001-0250.mp4","./uploads/3.mp4","./uploads/2.mp4","./uploads/5.mp4","/uploads/0001-0072.mp4"];
+  let vids=["./uploads/0001-0030.mp4","./uploads/0001-0250.mp4","./uploads/3.mp4","./uploads/2.mp4","./uploads/5.mp4","/uploads/0001-0072.mp4"]
+  var arr=[]
+  console.log(vids)
 
-// Serve static files from the "public" directory
 
-// Middleware to parse JSON data sent from the frontend
-app.use(json());
-// Route to receive data from the frontend
-
-  async function run() {
-   try {
-     await client.connect();
-     console.log("Connected successfully to MongoDB");
-  
-     const database = client.db('billCo');
-     const collection = database.collection('stuff');
-  
-     
-   let result= await collection.find({}).toArray(function(err, result) {
-        if (err) throw err;
-        console.log(result);
-        db.close();
-    });
-    // console.log(result);
+    fetch('http://localhost:3001/api/data')
+    // .then(res => {
+      //   console.log(res.json)
+      //  const file=JSON.parse(res.json)
+      //   console.log(file)
+      // })
+      .then(response => response.json())
+      .then(result => {
+        vids = result.response.slice();
+        console.log(arr)
+      })
+      .catch(error => {
+        console.log(error);
+        // Handle the error in case the request is not successfull
+      });
     
     
-    await collection.deleteMany({user:""}, function(err, obj) {
-      
-      console.log(obj.result.n + " document(s) deleted");
-      
-    });
-   } catch (error) {
-     console.error("Error:", error);
-   } finally {
-     await client.close();
-     console.log("Connection closed.");
-   }
+    console.log(arr)
+    
+  
+    
+    function Car(props) {
+      return <h2><video width="500" controls >
+      <source src={props.brand.link} type="video/mp4"></source>
+    <br></br>
+    </video> </h2>
+    }
+    function videos(val, index) {
+      return (
+        <div key={index}>
+          <h2>{val.name}</h2>
+          <video width="500" controls>
+            <source src={val.link} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <br />
+        </div>
+      );
+    }
+    const videoList = vids.map((video, index) => videos(video, index));
+    function Garage() {
+    
+      return (
+        <>
+          <div>{videoList}</div>
+            { vids.forEach(videos)}
+            {vids.map((car) => <Car brand={car} />)}
+          
+        </>
+      );
+    }
+    
+  function App() {
+    return (
+      <div>
+        <a href="./upload.html">upload video</a>
+        <h1>Yubtub</h1>
+        <h2>Random Videos</h2>
+        <br/>
+      <Garage/>
+      </div>
+    );
   }
-  
-  
-  run()
- 
- 
+
+  export default App;

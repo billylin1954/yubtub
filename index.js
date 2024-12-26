@@ -3,6 +3,8 @@ const uri = "mongodb+srv://billylin1954:Cracknut4@cluster0.rrsqc.mongodb.net/?re
 const client = new  MongoClient(uri);
 const express = require("express");
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
 app.use(express.static('public'))
 app.use(cors())
@@ -14,14 +16,37 @@ const fileUpload = require("express-fileupload");
 app.use(fileUpload());
 
 // For handling the upload request
-app.post("/upload", function (req, res) {
+app.get('/api/data', async function (req, res) {
+  
+  try {
+    await client.connect();
+    console.log("Connected successfully to MongoDB");
 
+    const database = client.db('videos');
+    const collection = database.collection('videos');
+    
+    // Fetch videos data from MongoDB
+    const result = await collection.find().limit(200).toArray();
+  
+    res.send({ response: result } )
+  } catch (error) {
+    console.error("Error:", error);
+    
+  } finally {
+    await client.close();
+    console.log("Connection closed.");
+  }
+});
+app.post("/upload", function (req, res) {
+  res.sendFile(__dirname + '/frontend/public/upload.html'); 
+ 
+  
   // When a file has been uploaded
   if (req.files && Object.keys(req.files).length !== 0) {
   
     // Uploaded path
     const uploadedFile = req.files.uploadFile;
-
+  
     // Logging uploading file
     console.log(uploadedFile);
 
@@ -37,10 +62,10 @@ app.post("/upload", function (req, res) {
          
             const database = client.db('videos');
             const collection = database.collection('videos');
-           const link = uploadPath
+           const link = uploadPath.slice(48,uploadPath.length)
             const type="customer";
             // Insert the document into MongoDb
-            await collection.insertOne({ type,link});
+            await collection.insertOne({ type,link,name:req.body.name});
          
           } catch (error) {
             console.error("Error:", error);
@@ -49,7 +74,6 @@ app.post("/upload", function (req, res) {
             console.log("Connection closed.");
           }
          }
-         const receivedData = req.body;
        
          
          
@@ -59,9 +83,9 @@ app.post("/upload", function (req, res) {
       if (err) {
         console.log(err);
         res.send("Failed !!");
-      } else res.send("Successfully Uploaded !!");
+      } else console.log(":)");
     });
-  } else res.send("No file uploaded !!");
+  } else console.log(":(");
 });
 
 // To handle the download file request
@@ -82,31 +106,7 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/upload.html");
 });
 
-  async function run() {
-   try {
-     await client.connect();
-     console.log("Connected successfully to MongoDB");
-  
-     const database = client.db('videos');
-     const collection = database.collection('videos');
-  
-     
-     // Insert the document into MongoDB
-    const result = collection.find({})
-    console.log(result)
-  
-   } catch (error) {
-     console.error("Error:", error);
-   } finally {
-     
-     console.log("Connection closed.");
-   }
-  }
-  
-
-  
-  
-  run()
+ 
   app.listen(PORT, () => {
     console.log(`Server listening on  ${PORT}`);
   });
