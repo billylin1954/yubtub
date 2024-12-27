@@ -1,4 +1,4 @@
-why is vids not changed:  import './App.css';
+  import './App.css';
   let test=["./uploads/0001-0030.mp4","./uploads/0001-0250.mp4","./uploads/3.mp4","./uploads/2.mp4","./uploads/5.mp4","/uploads/0001-0072.mp4"];
   let vids=["./uploads/0001-0030.mp4","./uploads/0001-0250.mp4","./uploads/3.mp4","./uploads/2.mp4","./uploads/5.mp4","/uploads/0001-0072.mp4"]
   var arr=[]
