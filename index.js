@@ -8,7 +8,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
-app.use(express.static('frontend/build'))
+app.use(express.static('client/build'))
 app.use(cors())
 const PORT = process.env.PORT || 3001;
 app.use(express.json());
@@ -66,7 +66,7 @@ app.get('/api/data', async function (req, res) {
   }
 });
 app.post("/upload", function (req, res) {
-  res.sendFile(__dirname + '/public/upload.html'); 
+  
  
   
   // When a file has been uploaded
