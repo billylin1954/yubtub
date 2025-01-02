@@ -3,10 +3,12 @@ const uri = "mongodb+srv://billylin1954:Cracknut4@cluster0.rrsqc.mongodb.net/?re
 const client = new  MongoClient(uri);
 const express = require("express");
 const app = express();
+const multer = require('multer');
+const path = require('path');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
-app.use(express.static('public'))
+app.use(express.static('frontend/build'))
 app.use(cors())
 const PORT = process.env.PORT || 3001;
 app.use(express.json());
@@ -14,6 +16,32 @@ app.use(express.json());
 const fileUpload = require("express-fileupload");
 // Passing fileUpload as a middleware
 app.use(fileUpload());
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      // Set the upload folder
+      cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+      // Save the file with its original name
+      cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+// Define the upload route
+app.post('/api/uploadfile', upload.single('myFile'), (req, res) => {
+  try {
+      console.log('File received:', req.file);
+      res.status(200).json({
+          message: 'File uploaded successfully',
+          file: req.file,
+      });
+  } catch (error) {
+      console.error('Error uploading file:', error);
+      res.status(500).json({ message: 'File upload failed' });
+  }
+});
 
 // For handling the upload request
 app.get('/api/data', async function (req, res) {
@@ -38,7 +66,7 @@ app.get('/api/data', async function (req, res) {
   }
 });
 app.post("/upload", function (req, res) {
-  res.sendFile(__dirname + '/frontend/public/upload.html'); 
+  res.sendFile(__dirname + '/public/upload.html'); 
  
   
   // When a file has been uploaded
@@ -52,10 +80,10 @@ app.post("/upload", function (req, res) {
 
     // Upload path
     const uploadPath = __dirname
-        +  "/frontend/public/uploads/" + uploadedFile.name;
+        +  "/public/uploads/" + uploadedFile.name;
         async function run() {
           const uploadPath = __dirname
-        + "/frontend/public/uploads/" + uploadedFile.name;
+        + "/public/uploads/" + uploadedFile.name;
           try {
             await client.connect();
             console.log("Connected successfully to MongoDB");
@@ -89,16 +117,6 @@ app.post("/upload", function (req, res) {
 });
 
 // To handle the download file request
-app.get("/download", function (req, res) {
-
-  // The res.download() talking file path to be downloaded
-  res.download(__dirname + "/download_gfg.txt", function (err) {
-    if (err) {
-      console.log(err);
-    }
-  });
-});
-
 // GET request to the root of the app
 app.get("/", function (req, res) {
 
