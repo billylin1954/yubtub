@@ -80,10 +80,10 @@ app.post("/upload", function (req, res)   {
 
     // Upload path
     const uploadPath = __dirname
-        +  "/frontend/public/uploads/" + uploadedFile.name;
+        +  "/frontend/public/uploads/" + uploadedFile.name.split(" ").join("");
         async function run() {
           const uploadPath = __dirname
-        + "/frontend/public/uploads/" + uploadedFile.name;
+        + "/frontend/public/uploads/" + uploadedFile.name.split(" ").join("");
           try {
             await client.connect();
             console.log("Connected successfully to MongoDB");
