@@ -65,8 +65,8 @@ app.get('/api/data', async function (req, res) {
     console.log("Connection closed.");
   }
 });
-app.post("/upload", function (req, res) {
-  res.sendFile(__dirname + '/public/upload.html'); 
+app.post("/upload", function (req, res)   {
+ 
  
   
   // When a file has been uploaded
@@ -80,21 +80,27 @@ app.post("/upload", function (req, res) {
 
     // Upload path
     const uploadPath = __dirname
-        +  "/public/uploads/" + uploadedFile.name;
+        +  "/frontend/public/uploads/" + uploadedFile.name;
         async function run() {
           const uploadPath = __dirname
-        + "/public/uploads/" + uploadedFile.name;
+        + "/frontend/public/uploads/" + uploadedFile.name;
           try {
             await client.connect();
             console.log("Connected successfully to MongoDB");
          
             const database = client.db('videos');
             const collection = database.collection('videos');
+            console.log("path")
+           
            const link = uploadPath.slice(48,uploadPath.length)
             const type="customer";
             // Insert the document into MongoDb
             await collection.insertOne({ type,link,name:req.body.name});
-         
+            console.log('File received:', req.file);
+            res.status(200).json({
+                message: 'File uploaded successfully',
+                file: req.file,
+            });
           } catch (error) {
             console.error("Error:", error);
           } finally {
@@ -110,7 +116,7 @@ app.post("/upload", function (req, res) {
     uploadedFile.mv(uploadPath, function (err) {
       if (err) {
         console.log(err);
-        res.send("Failed !!");
+       
       } else console.log(":)");
     });
   } else console.log(":(");
@@ -120,8 +126,7 @@ app.post("/upload", function (req, res) {
 // GET request to the root of the app
 app.get("/", function (req, res) {
 
-  // Sending index.html file as response to the client
-  res.sendFile(__dirname + "/upload.html");
+  
 });
 
  
