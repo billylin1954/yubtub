@@ -35,7 +35,7 @@ function Garage() {
   const [vids, setVids] = useState([]);
   
   useEffect(() => {
-    fetch('http://localhost:3001/api/data')
+    fetch('https://yubtub.onrender.com/api/data')
     .then((response) => response.json())
     .then((result) => {
       if (Array.isArray(result.response)) {
