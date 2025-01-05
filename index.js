@@ -8,7 +8,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require('cors');
-app.use(express.static('client/build'))
+app.use(express.static('frontend/build'))
 app.use(cors())
 const PORT = process.env.PORT || 3001;
 app.use(express.json());
@@ -65,13 +65,8 @@ app.get('/api/data', async function (req, res) {
     console.log("Connection closed.");
   }
 });
-<<<<<<< HEAD
 app.post("/upload", function (req, res)   {
  
-=======
-app.post("/upload", function (req, res) {
-  
->>>>>>> bc71af558cca4081c02cfdab97c9b3157f9363ed
  
   
   // When a file has been uploaded
@@ -85,17 +80,10 @@ app.post("/upload", function (req, res) {
 
     // Upload path
     const uploadPath = __dirname
-<<<<<<< HEAD
         +  "/frontend/public/uploads/" + uploadedFile.name.split(" ").join("");
         async function run() {
           const uploadPath = __dirname
         + "/frontend/public/uploads/" + uploadedFile.name.split(" ").join("");
-=======
-        +  "/client/build/uploads/" + uploadedFile.name;
-        async function run() {
-          const uploadPath = __dirname
-        + "/client/build/uploads/" + uploadedFile.name;
->>>>>>> bc71af558cca4081c02cfdab97c9b3157f9363ed
           try {
             await client.connect();
             console.log("Connected successfully to MongoDB");
